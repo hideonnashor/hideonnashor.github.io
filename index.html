@@ -27,7 +27,7 @@
             }
         }
 
-        .card {
+       .card {
             background-color: rgba(255, 255, 255, 0.9);
             border-radius: 15px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
@@ -108,6 +108,20 @@
             font-size: 32px;
             margin-right: 5px;
         }
+
+        #calendar-controls {
+            margin-top: 10px;
+        }
+
+        #weather-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #weather-info span {
+            color: #ff69b4;
+        }
     </style>
 </head>
 
@@ -117,7 +131,30 @@
         <p>距离 <strong id="hand-holding-day-name">牵手日</strong> 已经过去了 <span id="hand-holding-day-days"></span> 天</p>
         <p>距离 <strong id="princess-birthday-name">👸破蛋日</strong> 还有 <span id="princess-birthday-days"></span> 天</p>
         <p>距离 <strong id="farmer-birthday-name">👨‍🌾破蛋日</strong> 还有 <span id="farmer-birthday-days"></span> 天</p>
-        <p id="weather-info"><span id="weather-icon"></span></p>
+        <div id="weather-info">
+            <span id="weather-icon"></span><span id="weather-place"></span> 当前天气：<span id="weather-condition"></span>
+            <br>
+            <span>温度：<span id="weather-temperature"></span>℃</span>
+        </div>
+        <div id="calendar-controls">
+            <select id="year-select">
+            </select>
+            <select id="month-select">
+                <option value="0">1月</option>
+                <option value="1">2月</option>
+                <option value="2">3月</option>
+                <option value="3">4月</option>
+                <option value="4">5月</option>
+                <option value="5">6月</option>
+                <option value="6">7月</option>
+                <option value="7">8月</option>
+                <option value="8">9月</option>
+                <option value="9">10月</option>
+                <option value="10">11月</option>
+                <option value="11">12月</option>
+            </select>
+            <button onclick="updateCalendar()">确定</button>
+        </div>
         <div id="calendar">
             <table>
                 <thead>
@@ -177,16 +214,31 @@
         const princessBirthdayDaysElement = document.getElementById('princess-birthday-days');
         const farmerBirthdayNameElement = document.getElementById('farmer-birthday-name');
         const farmerBirthdayDaysElement = document.getElementById('farmer-birthday-days');
-        const weatherInfoElement = document.getElementById('weather-info');
         const weatherIconElement = document.getElementById('weather-icon');
+        const weatherPlaceElement = document.getElementById('weather-place');
+        const weatherConditionElement = document.getElementById('weather-condition');
+        const weatherTemperatureElement = document.getElementById('weather-temperature');
         const calendarBody = document.getElementById('calendar-body');
         const resultElement = document.getElementById('result');
+        const yearSelect = document.getElementById('year-select');
+        const monthSelect = document.getElementById('month-select');
 
         // 更新显示内容
         handHoldingDayNameElement.textContent = HAND_HOLDING_NAME;
         handHoldingDayDaysElement.textContent = daysSinceHandHolding;
         princessBirthdayDaysElement.textContent = daysToPrincessBirthday;
         farmerBirthdayDaysElement.textContent = daysToFarmerBirthday;
+
+        // 填充年份选择框
+        for (let i = now.getFullYear() - 10; i <= now.getFullYear() + 10; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i;
+            yearSelect.appendChild(option);
+            if (i === now.getFullYear()) {
+                option.selected = true;
+            }
+        }
 
         // 天气 API 请求
         const API_URL = 'https://cn.apihz.cn/api/tianqi/tqyb.php?id=88888888&key=88888888&sheng=广东&place=江门';
@@ -229,7 +281,9 @@
                     }
 
                     weatherIconElement.textContent = weatherEmoji;
-                    weatherInfoElement.textContent = `${place} 当前天气：${weather} ${weatherEmoji}，温度：${temperature}℃。${careMessage}`;
+                    weatherPlaceElement.textContent = place;
+                    weatherConditionElement.textContent = weather;
+                    weatherTemperatureElement.textContent = temperature;
                 } else {
                     weatherInfoElement.textContent = `获取天气信息失败：${data.msg}`;
                 }
@@ -270,9 +324,13 @@
         }
 
         // 初始化日历
-        const currentYear = now.getFullYear();
-        const currentMonth = now.getMonth();
-        generateCalendar(currentYear, currentMonth);
+        generateCalendar(now.getFullYear(), now.getMonth());
+
+        function updateCalendar() {
+            const selectedYear = parseInt(yearSelect.value);
+            const selectedMonth = parseInt(monthSelect.value);
+            generateCalendar(selectedYear, selectedMonth);
+        }
 
         // 点击日期计算距离牵手日的天数
         calendarBody.addEventListener('click', function (event) {
