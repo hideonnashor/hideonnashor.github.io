@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #e6f7ff 0%, #f0e6ff 100%);
+            background: linear-gradient(135deg, #3a4750 0%, #4e5a64 100%);
             background-size: 400% 400%;
             animation: gradientAnimation 15s ease infinite;
             display: flex;
@@ -42,12 +42,25 @@
         }
 
        .card {
-            background-color: white;
+            background-color: #f4f4f4;
             border-radius: 15px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 30px;
             width: 500px;
             text-align: center;
+            animation: slideIn 1s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         h1 {
@@ -74,12 +87,12 @@
         }
 
         strong {
-            color: #007BFF;
+            color: #999;
             transition: background-color 0.3s ease;
         }
 
         strong:hover {
-            background-color: #e0f0ff;
+            background-color: #e0e0e0;
         }
 
         #calendar {
@@ -101,17 +114,23 @@
         }
 
         th {
-            background-color: #007BFF;
+            background-color: #999;
             color: white;
         }
 
         td:hover {
-            background-color: #f0f0f0;
+            background-color: #e0e0e0;
+        }
+
+        td:active {
+            background-color: #ccc;
+            transform: scale(0.98);
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
         #result {
             margin-top: 20px;
-            color: #007BFF;
+            color: #999;
             font-weight: bold;
             animation: fadeIn 0.5s ease;
         }
@@ -136,7 +155,7 @@
         }
 
        .calendar-control span {
-            background-color: #f0f0f0;
+            background-color: #e0e0e0;
             color: #333;
             padding: 8px 16px;
             border-radius: 5px;
@@ -153,6 +172,11 @@
             margin: 0 5px;
         }
 
+       .calendar-control button:active {
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
         #weather-info {
             display: flex;
             flex-direction: column;
@@ -160,7 +184,7 @@
         }
 
         #weather-info span {
-            color: #007BFF;
+            color: #999;
         }
     </style>
 </head>
