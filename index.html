@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>刻·度</title>
+    <title>时·刻</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -14,6 +14,17 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         .card {
@@ -39,50 +50,69 @@
 
         strong {
             color: #764ba2;
+            transition: background-color 0.3s ease;
+        }
+
+        strong:hover {
+            background-color: #e0e0ff;
         }
     </style>
 </head>
 
 <body>
     <div class="card">
-        <h1>刻·度</h1>
-        <p id="anniversary-info"></p>
-        <p id="past-date-info"></p>
+        <h1>日期计算</h1>
+        <p>距离 <strong id="hand-holding-day-name">牵手日</strong> 已经过去了 <span id="hand-holding-day-days"></span> 天</p>
+        <p>距离 <strong id="princess-birthday-name">👸破蛋日</strong> 还有 <span id="princess-birthday-days"></span> 天</p>
+        <p>距离 <strong id="farmer-birthday-name">👨‍🌾破蛋日</strong> 还有 <span id="farmer-birthday-days"></span> 天</p>
     </div>
 
     <script>
         // 可在此处方便地调整纪念日、过去日期以及对应的日子名字
-        const ANNIVERSARY_DATE = '2023-02-01';
-        const ANNIVERSARY_NAME = '牵手日';
-        const PAST_DATE = '2025-06-27';
-        const PAST_DATE_NAME = '破蛋日';
+        const HAND_HOLDING_DATE = '2023-02-01';
+        const HAND_HOLDING_NAME = '牵手日';
+        const PRINCESS_BIRTHDAY_MONTH = 6;
+        const PRINCESS_BIRTHDAY_DAY = 27;
+        const FARMER_BIRTHDAY_MONTH = 8;
+        const FARMER_BIRTHDAY_DAY = 26;
 
         // 创建日期对象
-        const anniversary = new Date(ANNIVERSARY_DATE);
-        const pastDate = new Date(PAST_DATE);
+        const handHoldingDate = new Date(HAND_HOLDING_DATE);
         const now = new Date();
 
         // 计算一天的毫秒数
         const oneDay = 24 * 60 * 60 * 1000;
 
         // 计算距离牵手日过去的天数
-        const daysSinceAnniversary = Math.floor((now - anniversary) / oneDay);
-        // 计算距离破蛋日的天数
-        const daysToPastDate = Math.ceil((pastDate - now) / oneDay);
+        const daysSinceHandHolding = Math.floor((now - handHoldingDate) / oneDay);
+
+        // 计算距离👸破蛋日的天数
+        let princessBirthdayThisYear = new Date(now.getFullYear(), PRINCESS_BIRTHDAY_MONTH - 1, PRINCESS_BIRTHDAY_DAY);
+        if (princessBirthdayThisYear < now) {
+            princessBirthdayThisYear = new Date(now.getFullYear() + 1, PRINCESS_BIRTHDAY_MONTH - 1, PRINCESS_BIRTHDAY_DAY);
+        }
+        const daysToPrincessBirthday = Math.ceil((princessBirthdayThisYear - now) / oneDay);
+
+        // 计算距离👨‍🌾破蛋日的天数
+        let farmerBirthdayThisYear = new Date(now.getFullYear(), FARMER_BIRTHDAY_MONTH - 1, FARMER_BIRTHDAY_DAY);
+        if (farmerBirthdayThisYear < now) {
+            farmerBirthdayThisYear = new Date(now.getFullYear() + 1, FARMER_BIRTHDAY_MONTH - 1, FARMER_BIRTHDAY_DAY);
+        }
+        const daysToFarmerBirthday = Math.ceil((farmerBirthdayThisYear - now) / oneDay);
 
         // 获取用于显示结果的元素
-        const anniversaryInfoElement = document.getElementById('anniversary-info');
-        const pastDateInfoElement = document.getElementById('past-date-info');
+        const handHoldingDayNameElement = document.getElementById('hand-holding-day-name');
+        const handHoldingDayDaysElement = document.getElementById('hand-holding-day-days');
+        const princessBirthdayNameElement = document.getElementById('princess-birthday-name');
+        const princessBirthdayDaysElement = document.getElementById('princess-birthday-days');
+        const farmerBirthdayNameElement = document.getElementById('farmer-birthday-name');
+        const farmerBirthdayDaysElement = document.getElementById('farmer-birthday-days');
 
-        // 更新牵手日的显示内容
-        anniversaryInfoElement.textContent = `距离 ${ANNIVERSARY_NAME} 已经过去了 ${daysSinceAnniversary} 天`;
-
-        // 更新破蛋日的显示内容
-        if (daysToPastDate > 0) {
-            pastDateInfoElement.textContent = `距离 ${PAST_DATE_NAME} 还有 ${daysToPastDate} 天`;
-        } else if (daysToPastDate === 0) {
-            pastDateInfoElement.textContent = `今天是 ${PAST_DATE_NAME}！`;
-        }
+        // 更新显示内容
+        handHoldingDayNameElement.textContent = HAND_HOLDING_NAME;
+        handHoldingDayDaysElement.textContent = daysSinceHandHolding;
+        princessBirthdayDaysElement.textContent = daysToPrincessBirthday;
+        farmerBirthdayDaysElement.textContent = daysToFarmerBirthday;
     </script>
 </body>
 
