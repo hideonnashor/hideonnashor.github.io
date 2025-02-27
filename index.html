@@ -116,19 +116,29 @@
             align-items: center;
         }
 
-        select {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
+       .calendar-control {
+            display: inline-flex;
+            align-items: center;
+            margin: 0 10px;
+            position: relative;
+        }
+
+       .calendar-control span {
             background-color: #ffd1dc;
             color: #666;
+            padding: 8px 16px;
+            border-radius: 5px;
             font-size: 16px;
-            appearance: none;
-            -webkit - appearance: none;
-            -moz - appearance: none;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23666"><path d="M7 10l5 5 5-5z"/></svg>');
-            background-repeat: no-repeat;
-            background-position: right 10px center;
+            cursor: pointer;
+        }
+
+       .calendar-control button {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #666;
+            cursor: pointer;
+            margin: 0 5px;
         }
 
         #weather-info {
@@ -155,22 +165,16 @@
             <span>温度：<span id="weather-temperature"></span>℃</span>
         </div>
         <div id="calendar-controls">
-            <select id="year-select">
-            </select>
-            <select id="month-select">
-                <option value="0">1月</option>
-                <option value="1">2月</option>
-                <option value="2">3月</option>
-                <option value="3">4月</option>
-                <option value="4">5月</option>
-                <option value="5">6月</option>
-                <option value="6">7月</option>
-                <option value="7">8月</option>
-                <option value="8">9月</option>
-                <option value="9">10月</option>
-                <option value="10">11月</option>
-                <option value="11">12月</option>
-            </select>
+            <div class="calendar-control">
+                <button id="prev-year">&lt;</button>
+                <span id="year-display"></span>
+                <button id="next-year">&gt;</button>
+            </div>
+            <div class="calendar-control">
+                <button id="prev-month">&lt;</button>
+                <span id="month-display"></span>
+                <button id="next-month">&gt;</button>
+            </div>
         </div>
         <div id="calendar">
             <table>
@@ -237,8 +241,12 @@
         const weatherTemperatureElement = document.getElementById('weather-temperature');
         const calendarBody = document.getElementById('calendar-body');
         const resultElement = document.getElementById('result');
-        const yearSelect = document.getElementById('year-select');
-        const monthSelect = document.getElementById('month-select');
+        const yearDisplay = document.getElementById('year-display');
+        const monthDisplay = document.getElementById('month-display');
+        const prevYearButton = document.getElementById('prev-year');
+        const nextYearButton = document.getElementById('next-year');
+        const prevMonthButton = document.getElementById('prev-month');
+        const nextMonthButton = document.getElementById('next-month');
 
         // 更新显示内容
         handHoldingDayNameElement.textContent = HAND_HOLDING_NAME;
@@ -246,16 +254,9 @@
         princessBirthdayDaysElement.textContent = daysToPrincessBirthday;
         farmerBirthdayDaysElement.textContent = daysToFarmerBirthday;
 
-        // 填充年份选择框
-        for (let i = now.getFullYear() - 10; i <= now.getFullYear() + 10; i++) {
-            const option = document.createElement('option');
-            option.value = i;
-            option.textContent = i;
-            yearSelect.appendChild(option);
-            if (i === now.getFullYear()) {
-                option.selected = true;
-            }
-        }
+        // 初始化年份和月份显示
+        yearDisplay.textContent = now.getFullYear();
+        monthDisplay.textContent = now.getMonth() + 1 + '月';
 
         // 天气 API 请求
         const API_URL = 'https://cn.apihz.cn/api/tianqi/tqyb.php?id=88888888&key=88888888&sheng=广东&place=江门';
@@ -343,17 +344,44 @@
         // 初始化日历
         generateCalendar(now.getFullYear(), now.getMonth());
 
-        // 监听年份和月份选择框的变化
-        yearSelect.addEventListener('change', function () {
-            const selectedYear = parseInt(yearSelect.value);
-            const selectedMonth = parseInt(monthSelect.value);
-            generateCalendar(selectedYear, selectedMonth);
+        // 年份切换事件
+        prevYearButton.addEventListener('click', function () {
+            const currentYear = parseInt(yearDisplay.textContent);
+            yearDisplay.textContent = currentYear - 1;
+            generateCalendar(currentYear - 1, parseInt(monthDisplay.textContent.slice(0, -1)) - 1);
         });
 
-        monthSelect.addEventListener('change', function () {
-            const selectedYear = parseInt(yearSelect.value);
-            const selectedMonth = parseInt(monthSelect.value);
-            generateCalendar(selectedYear, selectedMonth);
+        nextYearButton.addEventListener('click', function () {
+            const currentYear = parseInt(yearDisplay.textContent);
+            yearDisplay.textContent = currentYear + 1;
+            generateCalendar(currentYear + 1, parseInt(monthDisplay.textContent.slice(0, -1)) - 1);
+        });
+
+        // 月份切换事件
+        prevMonthButton.addEventListener('click', function () {
+            const currentMonth = parseInt(monthDisplay.textContent.slice(0, -1));
+            const currentYear = parseInt(yearDisplay.textContent);
+            let newMonth = currentMonth - 1;
+            let newYear = currentYear;
+            if (newMonth < 1) {
+                newMonth = 12;
+                newYear--;
+            }
+            monthDisplay.textContent = newMonth + '月';
+            generateCalendar(newYear, newMonth - 1);
+        });
+
+        nextMonthButton.addEventListener('click', function () {
+            const currentMonth = parseInt(monthDisplay.textContent.slice(0, -1));
+            const currentYear = parseInt(yearDisplay.textContent);
+            let newMonth = currentMonth + 1;
+            let newYear = currentYear;
+            if (newMonth > 12) {
+                newMonth = 1;
+                newYear++;
+            }
+            monthDisplay.textContent = newMonth + '月';
+            generateCalendar(newYear, newMonth - 1);
         });
 
         // 点击日期计算距离牵手日的天数
