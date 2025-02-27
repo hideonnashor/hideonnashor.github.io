@@ -46,8 +46,8 @@
 <body>
     <div class="card">
         <h1>日期计算</h1>
-        <p>距离 <strong id="anniversary-name"></strong> 已经过去了：<span id="anniversary-days"></span> 天</p>
-        <p>距离 <strong id="past-date-name"></strong> 已经过去了：<span id="past-days"></span> 天</p>
+        <p id="anniversary-info"></p>
+        <p id="past-date-info"></p>
     </div>
 
     <script>
@@ -67,20 +67,22 @@
 
         // 计算距离牵手日过去的天数
         const daysSinceAnniversary = Math.floor((now - anniversary) / oneDay);
-        // 计算距离破蛋日过去的天数
-        const daysSincePastDate = Math.floor((now - pastDate) / oneDay);
+        // 计算距离破蛋日的天数
+        const daysToPastDate = Math.ceil((pastDate - now) / oneDay);
 
         // 获取用于显示结果的元素
-        const anniversaryNameElement = document.getElementById('anniversary-name');
-        const pastDateNameElement = document.getElementById('past-date-name');
-        const anniversaryDaysElement = document.getElementById('anniversary-days');
-        const pastDaysElement = document.getElementById('past-days');
+        const anniversaryInfoElement = document.getElementById('anniversary-info');
+        const pastDateInfoElement = document.getElementById('past-date-info');
 
-        // 更新显示内容
-        anniversaryNameElement.textContent = ANNIVERSARY_NAME;
-        pastDateNameElement.textContent = PAST_DATE_NAME;
-        anniversaryDaysElement.textContent = daysSinceAnniversary;
-        pastDaysElement.textContent = daysSincePastDate > 0 ? daysSincePastDate : `还未到，还有 ${Math.abs(daysSincePastDate)} 天`;
+        // 更新牵手日的显示内容
+        anniversaryInfoElement.textContent = `距离 ${ANNIVERSARY_NAME} 已经过去了 ${daysSinceAnniversary} 天`;
+
+        // 更新破蛋日的显示内容
+        if (daysToPastDate > 0) {
+            pastDateInfoElement.textContent = `距离 ${PAST_DATE_NAME} 还有 ${daysToPastDate} 天`;
+        } else if (daysToPastDate === 0) {
+            pastDateInfoElement.textContent = `今天是 ${PAST_DATE_NAME}！`;
+        }
     </script>
 </body>
 
