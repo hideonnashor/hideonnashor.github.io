@@ -7,8 +7,8 @@
     <title>时·刻</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f9d4ff 0%, #ffd1dc 100%);
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -28,18 +28,16 @@
         }
 
        .card {
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: white;
             border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 30px;
             width: 500px;
             text-align: center;
-            position: relative;
-            overflow: hidden;
         }
 
         h1 {
-            color: #ff69b4;
+            color: #333;
             margin-bottom: 20px;
             font-size: 28px;
             animation: bounce 1s infinite alternate;
@@ -62,12 +60,12 @@
         }
 
         strong {
-            color: #ff69b4;
+            color: #007BFF;
             transition: background-color 0.3s ease;
         }
 
         strong:hover {
-            background-color: #ffe4e1;
+            background-color: #e0f0ff;
         }
 
         #calendar {
@@ -81,7 +79,7 @@
 
         th,
         td {
-            padding: 10px;
+            padding: 12px;
             text-align: center;
             border: 1px solid #ccc;
             cursor: pointer;
@@ -89,17 +87,17 @@
         }
 
         th {
-            background-color: #ffc0cb;
+            background-color: #007BFF;
             color: white;
         }
 
         td:hover {
-            background-color: #ffe4e1;
+            background-color: #f0f0f0;
         }
 
         #result {
             margin-top: 20px;
-            color: #ff69b4;
+            color: #007BFF;
             font-weight: bold;
             animation: fadeIn 0.5s ease;
         }
@@ -124,8 +122,8 @@
         }
 
        .calendar-control span {
-            background-color: #ffd1dc;
-            color: #666;
+            background-color: #f0f0f0;
+            color: #333;
             padding: 8px 16px;
             border-radius: 5px;
             font-size: 16px;
@@ -148,7 +146,7 @@
         }
 
         #weather-info span {
-            color: #ff69b4;
+            color: #007BFF;
         }
     </style>
 </head>
@@ -262,13 +260,13 @@
         const API_URL = 'https://cn.apihz.cn/api/tianqi/tqyb.php?id=88888888&key=88888888&sheng=广东&place=江门';
 
         fetch(API_URL)
-          .then(response => {
+           .then(response => {
                 if (!response.ok) {
                     throw new Error('网络响应异常');
                 }
                 return response.json();
             })
-          .then(data => {
+           .then(data => {
                 if (data.code === 200) {
                     const weather = data.weather1;
                     const temperature = data.temperature;
@@ -306,7 +304,7 @@
                     weatherInfoElement.textContent = `获取天气信息失败：${data.msg}`;
                 }
             })
-          .catch(error => {
+           .catch(error => {
                 weatherInfoElement.textContent = '获取天气信息失败，请稍后重试。';
                 console.error('Error fetching weather data:', error);
             });
