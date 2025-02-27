@@ -404,7 +404,7 @@
                 if (daysDifference > 0) {
                     resultElement.textContent = `从 ${HAND_HOLDING_NAME} 到 ${event.target.dataset.date} 已经过去了 ${daysDifference} 天啦~`;
                 } else if (daysDifference < 0) {
-                    resultElement.textContent = `${HAND_HOLDING_NAME} 还没到 ${event.target.dataset.date} 呢，距离那天还有 ${Math.abs(daysDifference)} 天。`;
+                    resultElement.textContent = `选定的日子还不是 ${HAND_HOLDING_NAME} 呢，距离那天还有 ${Math.abs(daysDifference)} 天。`;
                 } else {
                     resultElement.textContent = `这一天就是 ${HAND_HOLDING_NAME} 哦！`;
                 }
