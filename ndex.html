@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日期计算页面</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            width: 350px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        p {
+            color: #666;
+            font-size: 18px;
+            margin: 15px 0;
+        }
+
+        strong {
+            color: #764ba2;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h1>日期计算</h1>
+        <p>距离 <strong id="anniversary-name"></strong> 已经过去了：<span id="anniversary-days"></span> 天</p>
+        <p>距离 <strong id="past-date-name"></strong> 已经过去了：<span id="past-days"></span> 天</p>
+    </div>
+
+    <script>
+        // 可在此处方便地调整纪念日、过去日期以及对应的日子名字
+        const ANNIVERSARY_DATE = '2023-02-01';
+        const ANNIVERSARY_NAME = '牵手日';
+        const PAST_DATE = '2025-06-27';
+        const PAST_DATE_NAME = '破蛋日';
+
+        // 创建日期对象
+        const anniversary = new Date(ANNIVERSARY_DATE);
+        const pastDate = new Date(PAST_DATE);
+        const now = new Date();
+
+        // 计算一天的毫秒数
+        const oneDay = 24 * 60 * 60 * 1000;
+
+        // 计算距离牵手日过去的天数
+        const daysSinceAnniversary = Math.floor((now - anniversary) / oneDay);
+        // 计算距离破蛋日过去的天数
+        const daysSincePastDate = Math.floor((now - pastDate) / oneDay);
+
+        // 获取用于显示结果的元素
+        const anniversaryNameElement = document.getElementById('anniversary-name');
+        const pastDateNameElement = document.getElementById('past-date-name');
+        const anniversaryDaysElement = document.getElementById('anniversary-days');
+        const pastDaysElement = document.getElementById('past-days');
+
+        // 更新显示内容
+        anniversaryNameElement.textContent = ANNIVERSARY_NAME;
+        pastDateNameElement.textContent = PAST_DATE_NAME;
+        anniversaryDaysElement.textContent = daysSinceAnniversary;
+        pastDaysElement.textContent = daysSincePastDate > 0 ? daysSincePastDate : `还未到，还有 ${Math.abs(daysSincePastDate)} 天`;
+    </script>
+</body>
+
+</html>
