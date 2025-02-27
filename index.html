@@ -400,7 +400,7 @@
         calendarBody.addEventListener('click', function (event) {
             if (event.target.tagName === 'TD' && event.target.dataset.date) {
                 const selectedDate = new Date(event.target.dataset.date);
-                const daysDifference = Math.floor((selectedDate - handHoldingDate) / oneDay) - 1;
+                const daysDifference = Math.floor((selectedDate - handHoldingDate) / oneDay) + 1;
                 if (daysDifference > 0) {
                     resultElement.textContent = `从 ${HAND_HOLDING_NAME} 到 ${event.target.dataset.date} 已经过去了 ${daysDifference} 天啦~`;
                 } else if (daysDifference < 0) {
