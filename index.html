@@ -111,6 +111,24 @@
 
         #calendar-controls {
             margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        select {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ffd1dc;
+            color: #666;
+            font-size: 16px;
+            appearance: none;
+            -webkit - appearance: none;
+            -moz - appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23666"><path d="M7 10l5 5 5-5z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
         }
 
         #weather-info {
@@ -153,7 +171,6 @@
                 <option value="10">11月</option>
                 <option value="11">12月</option>
             </select>
-            <button onclick="updateCalendar()">确定</button>
         </div>
         <div id="calendar">
             <table>
@@ -326,11 +343,18 @@
         // 初始化日历
         generateCalendar(now.getFullYear(), now.getMonth());
 
-        function updateCalendar() {
+        // 监听年份和月份选择框的变化
+        yearSelect.addEventListener('change', function () {
             const selectedYear = parseInt(yearSelect.value);
             const selectedMonth = parseInt(monthSelect.value);
             generateCalendar(selectedYear, selectedMonth);
-        }
+        });
+
+        monthSelect.addEventListener('change', function () {
+            const selectedYear = parseInt(yearSelect.value);
+            const selectedMonth = parseInt(monthSelect.value);
+            generateCalendar(selectedYear, selectedMonth);
+        });
 
         // 点击日期计算距离牵手日的天数
         calendarBody.addEventListener('click', function (event) {
