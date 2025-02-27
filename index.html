@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #f9d4ff 0%, #ffd1dc 100%);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -37,7 +37,7 @@
         }
 
         h1 {
-            color: #333;
+            color: #ff69b4;
             margin-bottom: 20px;
             font-size: 28px;
         }
@@ -49,22 +49,23 @@
         }
 
         strong {
-            color: #764ba2;
+            color: #ff69b4;
             transition: background-color 0.3s ease;
         }
 
         strong:hover {
-            background-color: #e0e0ff;
+            background-color: #ffe4e1;
         }
     </style>
 </head>
 
 <body>
     <div class="card">
-        <h1>日期计算</h1>
+        <h1>时·刻</h1>
         <p>距离 <strong id="hand-holding-day-name">牵手日</strong> 已经过去了 <span id="hand-holding-day-days"></span> 天</p>
         <p>距离 <strong id="princess-birthday-name">👸破蛋日</strong> 还有 <span id="princess-birthday-days"></span> 天</p>
         <p>距离 <strong id="farmer-birthday-name">👨‍🌾破蛋日</strong> 还有 <span id="farmer-birthday-days"></span> 天</p>
+        <p id="weather-info"></p>
     </div>
 
     <script>
@@ -107,12 +108,52 @@
         const princessBirthdayDaysElement = document.getElementById('princess-birthday-days');
         const farmerBirthdayNameElement = document.getElementById('farmer-birthday-name');
         const farmerBirthdayDaysElement = document.getElementById('farmer-birthday-days');
+        const weatherInfoElement = document.getElementById('weather-info');
 
         // 更新显示内容
         handHoldingDayNameElement.textContent = HAND_HOLDING_NAME;
         handHoldingDayDaysElement.textContent = daysSinceHandHolding;
         princessBirthdayDaysElement.textContent = daysToPrincessBirthday;
         farmerBirthdayDaysElement.textContent = daysToFarmerBirthday;
+
+        // 天气 API 请求
+        const API_URL = 'https://cn.apihz.cn/api/tianqi/tqyb.php?id=88888888&key=88888888&sheng=广东&place=江门';
+
+        fetch(API_URL)
+          .then(response => {
+                if (!response.ok) {
+                    throw new Error('网络响应异常');
+                }
+                return response.json();
+            })
+          .then(data => {
+                const weather = data.weather1;
+                const temperature = data.temperature;
+                let careMessage = '';
+
+                switch (weather) {
+                    case '晴':
+                        careMessage = '阳光正好，记得做好防晒，出门享受美好的一天哦！';
+                        break;
+                    case '多云':
+                        careMessage = '天气舒适，很适合出门散散步呢。';
+                        break;
+                    case '雨':
+                        careMessage = '出门记得携带雨具，雨天路滑，注意安全哟。';
+                        break;
+                    case '雪':
+                        careMessage = '银装素裹的世界真美，但要注意保暖防寒呀。';
+                        break;
+                    default:
+                        careMessage = '无论天气如何，都要保持好心情呀！';
+                }
+
+                weatherInfoElement.textContent = `广东江门当前天气：${weather}，温度：${temperature}℃。${careMessage}`;
+            })
+          .catch(error => {
+                weatherInfoElement.textContent = '获取天气信息失败，请稍后重试。';
+                console.error('Error fetching weather data:', error);
+            });
     </script>
 </body>
 
