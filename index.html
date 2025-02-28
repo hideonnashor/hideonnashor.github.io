@@ -7,7 +7,7 @@
     <title>时·刻</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Noto Serif SC', serif;
             background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
             background-size: 400% 400%;
             animation: gradientAnimation 15s ease infinite;
@@ -186,6 +186,14 @@
         #weather-info span {
             color: #d9534f;
         }
+
+        #daily-sentence {
+            margin-top: 20px;
+            color: #666;
+            font-style: italic;
+            border-top: 1px dashed #ccc;
+            padding-top: 10px;
+        }
     </style>
 </head>
 
@@ -229,6 +237,7 @@
             </table>
         </div>
         <p id="result"></p>
+        <p id="daily-sentence"></p>
     </div>
 
     <script>
@@ -283,6 +292,7 @@
         const nextYearButton = document.getElementById('next-year');
         const prevMonthButton = document.getElementById('prev-month');
         const nextMonthButton = document.getElementById('next-month');
+        const dailySentenceElement = document.getElementById('daily-sentence');
 
         // 更新显示内容
         handHoldingDayNameElement.textContent = HAND_HOLDING_NAME;
@@ -434,7 +444,15 @@
                 }
             }
         });
-    </script>
-</body>
 
-</html>
+        // 每日一句请求
+        const dailySentenceAPI = 'https://api.xygeng.cn/one';
+        fetch(dailySentenceAPI)
+           .then(response => {
+                if (!response.ok) {
+                    throw new Error('获取每日一句失败');
+                }
+                return response.json();
+            })
+           .then(data => {
+                if (data.code === 200)
